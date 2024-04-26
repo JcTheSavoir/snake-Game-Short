@@ -1,3 +1,14 @@
+//Create listener for arrowkey press
+window.addEventListener('keydown', event => {
+    const pressedKey = event.key
+    const arrowKeys = [" ","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"]
+    if(arrowKeys.includes(pressedKey)){
+        console.log(pressedKey)
+        event.preventDefault()
+    }
+    return pressedKey
+})
+
 // Create grid for game 
 const generateGrid = () => {
     let gridItself = document.querySelector('#gridItself');
