@@ -53,6 +53,16 @@ body{
     border: solid purple;
     border-width: 0.1px;
 }
+.gridEachSnake{
+    aspect-ratio: 1/1;
+    background-color: white;
+    border-width: 0.1px;
+}
+.gridEachApple{
+    aspect-ratio: 1/1;
+    background-color: red;
+    border-width: 0.1px;
+}
 .snakeItself{
     border: solid green;
 }
