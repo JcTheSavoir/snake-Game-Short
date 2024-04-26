@@ -1,0 +1,99 @@
+*{
+    border: solid darkorange;
+}
+body{
+    margin: 0;
+    /* border: 0; */
+}
+.pageContainer{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    height: 100vh;
+}
+.topContainer{
+    border: solid black;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: beige;
+    font-size: xx-large;
+}
+.gameTitle{
+    border: solid blue;
+}
+.middleContainer{
+    border: solid blue;
+    margin-left: auto;
+    margin-right: auto;
+    height: 50em;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.gameContainer{
+    border: solid red;
+    width: 50%;
+}
+.gridContainer{
+    border: solid green;
+    width: 100%;
+    /* aspect-ratio: 1/1; */
+}
+#gridItself{
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(25, 1fr) ;
+    grid-template-rows: repeat(25, 1fr) ;
+    background-color: black;
+}
+#gridItself > *{
+    aspect-ratio: 1/1;
+    border: solid purple;
+    border-width: 0.1px;
+}
+.snakeItself{
+    border: solid green;
+}
+.appleItself{
+    border: solid green;
+}
+.startGame{
+    margin: 1vh 0 1vh 0;
+    display: flex;
+}
+.retryGame{
+    border: solid green;
+}
+.bottomContainer{
+    border: solid black;
+    width: 100%;
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+.scoreContainer{
+    display: flex;
+    justify-content: space-between;
+}
+.footerContainer{
+    border: solid blue;
+    width: 100%;
+}
+.furtherDetails{
+
+}
+.siteInfo{
+    border: solid red;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.createdOn{
+    border: solid green;
+}
+.siteAuthor{
+    border: solid green;
+} 

@@ -9,33 +9,45 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        
-        <div class="topContainer">
-            <div class="gameTitle">Snake Game</div>
-        </div>
-        
-        <div class="middleContainer">
-            <div class="gameContainer">
-                <div class="gridContainer">
-                    <div class="snakeItself"></div>
-                    <div class="appleItself"></div>
-                    <div class="startGame"></div>
-                    <div class="retryGame"></div>
-                </div>
-                <div class="snakeScore"></div>
-                <div class="bestScore"></div>
+        <div class="pageContainer">
+            <div class="topContainer">
+                <div class="gameTitle">Snake Game</div>
             </div>
-        </div>
-
-        <div class="bottomContainer">
-            <div class="footer">
-                <div class="siteInfo">
-                    <div class="createdOn"></div>
-                    <div class="siteAuthor"></div>
+            
+            <button class="startGame" onclick="generateGrid()">Create Game</button>
+            <div class="middleContainer">
+                <div class="gameContainer">
+                    <div class="gridContainer">
+                        <div id="gridItself"></div>
+                        <!-- <div class="snakeItself"></div>
+                        <div class="appleItself"></div>
+                        <div class="startGame"></div>
+                        <div class="retryGame"></div> -->
+                    </div>
+                    <div class="scoreContainer">
+                        <div class="currentScoreContainer">
+                            <div class="snakeScoreTitle">Current Score:</div>
+                            <div class="actualSnakeScore"></div>
+                        </div>
+                        <div class="bestScoreContainer">
+                            <div class="bestScoreTitle">Best Score:</div>
+                            <div class="actualBestScore"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            
+            <div class="bottomContainer">
+                <div class="footerContainer">
+                    <div class="furtherDetails">Site Information</div>
+                    <div class="siteInfo">
+                        <div class="createdOn">Created On: 4/25/2024</div>
+                        <div class="siteAuthor">Author: J.C.</div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
-
 
 
 
