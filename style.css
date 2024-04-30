@@ -92,9 +92,6 @@ body{
     border: solid blue;
     width: 100%;
 }
-.furtherDetails{
-
-}
 .siteInfo{
     border: solid red;
     display: flex;
