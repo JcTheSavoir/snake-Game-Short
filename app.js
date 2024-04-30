@@ -151,6 +151,7 @@ const checkForDefeat = (a, b) => {
             return false
         }
     }
+    return true
 }
 
 //-----------------------------------------------------{Function for defeat}
