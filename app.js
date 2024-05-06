@@ -1,31 +1,14 @@
-//-------------------------------------------VV----------{Create listener for arrowkey press}
+//----------------------------------------{Variable to keep track of current score}
 let scoreTracker = 0
-window.addEventListener('keydown', event => {
-    // let currentApple = document.querySelector('.gridEachApple')
-    const pressedKey = event.key
-    const arrowKeys = [" ","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"]
-    let currentScore = document.querySelector('.actualSnakeScore')
-    if(arrowKeys.includes(pressedKey)){
-        console.log(pressedKey)
-        event.preventDefault()
-        directionSnake(pressedKey)
-        let findSnake = document.querySelector('.gridEachSnake')
-        let currentSnake = findSnake ? findSnake.id: null;
-        console.log(currentSnake)
-        let currentApple = document.querySelector('.gridEachApple')
-        if (currentApple === null) {
-            let newApple = document.querySelector(`#gridEach-${Math.floor(Math.random() * 626)}`)
-            newApple.setAttribute('class', 'gridEachApple')
-            scoreTracker += 1
-            currentScore.innerHTML = scoreTracker
-        }
-    }
-})
-
-
+//---------------------------------{Variable to keep track of current snake movement direction}
+let snakeCurrentDirection = null;
+//---------------------{Variable to assist in delaying snake movement}
+let delaySnake = null;
+console.log(delaySnake)
 
 // -------------------------------------------VV---------{Create grid for game}
 const generateGrid = () => {
+    console.log("generateGrid started")
     let gridItself = document.querySelector('#gridItself');
     gridItself.innerHTML = "";
     let currentScore = document.querySelector('.actualSnakeScore')
@@ -42,78 +25,143 @@ const generateGrid = () => {
     let startButton = document.querySelector('.startGame');
     startButton.innerHTML = "Restart Game"
 }
+//-------------------------------------------VV----------{Create listener for arrowkey press}
+window.addEventListener('keydown', event => {
+    const pressedKey = event.key
+    const arrowKeys = [" ","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"]
+    let currentScore = document.querySelector('.actualSnakeScore')
+    if(arrowKeys.includes(pressedKey)){
+        console.log(pressedKey)
+        event.preventDefault()
+        snakeCurrentDirection = pressedKey;
+        if(delaySnake === null){
+            snakeMoving()
+        }
+        // directionSnake(snakeCurrentDirection)
+        // let findSnake = document.querySelector('.gridEachSnake')
+        // let currentSnake = findSnake ? findSnake.id: null;
+        // console.log(currentSnake)
+        // let currentApple = document.querySelector('.gridEachApple')
+        // if (currentApple === null) {
+            // let newApple = document.querySelector(`#gridEach-${Math.floor(Math.random() * 626)}`)
+            // newApple.setAttribute('class', 'gridEachApple')
+            // scoreTracker += 1
+            // currentScore.innerHTML = scoreTracker
+    }
+})
+
+const snakeMoving = () => {
+    delaySnake = setInterval(() => {
+        if (snakeCurrentDirection) {
+            directionSnake(snakeCurrentDirection)
+        }
+    }, 500);
+}
 
 
 //-------------------------------------------VV----------{snake direction controls}
+
 const directionSnake = (e) => {
-    if (e == "ArrowUp") {
-        // ---------------------------find the element with snake class
-        let findSnake = document.querySelector('.gridEachSnake')
-        // -------------------------------------------Find the id of the associated snake element
-        let currentSnake = findSnake ? findSnake.id: null;
-        //----------------------------------------Split Id into word and number
-        const splitID = currentSnake.split('-')
-        //----------------------------Select the number part of the Id
-        hasBeenSplit = splitID[1];
-        //-------------------------------Ensures we are working with number and not a string
-        changeToNumber = hasBeenSplit * 1
-        //-------------------------Depending on the direction, change Id to match corresponding new block
-        newId = changeToNumber - 25
-        console.log(newId)
-        //----------------------Checks to see if the movement would lead to defeat
-        console.log(checkForDefeat(changeToNumber, newId))
-        //-------------------------------------select element with the new Id
-        let newSnake = document.querySelector(`#gridEach-${newId}`)
-        //---------------------------------------------add the Snake class to the element
-        newSnake.setAttribute('class', `gridEachSnake`)
-        //-------------------------Check if a new element needs the snake class
-        findSnake.classList.remove('gridEachSnake')
-        // checkToAddSnake(findSnake)
-    } else if (e == "ArrowDown"){
-        let findSnake = document.querySelector('.gridEachSnake')
-        let currentSnake = findSnake ? findSnake.id: null;
-        const splitID = currentSnake.split('-')
-        hasBeenSplit = splitID[1];
-        changeToNumber = hasBeenSplit * 1
-        newId = changeToNumber + 25
-        checkForDefeat(changeToNumber, newId)
-        let newSnake = document.querySelector(`#gridEach-${newId}`)
-        newSnake.setAttribute('class', `gridEachSnake`)
-        findSnake.classList.remove('gridEachSnake')
-        // checkToAddSnake(findSnake)
-    } else if (e == "ArrowRight") {
-        let findSnake = document.querySelector('.gridEachSnake')
-        let currentSnake = findSnake ? findSnake.id: null;
-        const splitID = currentSnake.split('-')
-        hasBeenSplit = splitID[1];
-        changeToNumber = hasBeenSplit * 1
-        newId = changeToNumber + 1
-        let newSnake = document.querySelector(`#gridEach-${newId}`)
-        if (checkForDefeat(changeToNumber, newId)) {
-            newSnake.setAttribute('class', `gridEachSnake`)
-        } else {
-            findSnake.classList.remove('gridEachSnake')
-            console.log("snake has hit a wall, time to reset")
-        }
-        findSnake.classList.remove('gridEachSnake')
-        // checkToAddSnake(findSnake)
-    } else if (e == "ArrowLeft") {
-        let findSnake = document.querySelector('.gridEachSnake')
-        let currentSnake = findSnake ? findSnake.id: null;
-        const splitID = currentSnake.split('-')
-        hasBeenSplit = splitID[1];
-        changeToNumber = hasBeenSplit * 1
-        newId = changeToNumber - 1
-        let newSnake = document.querySelector(`#gridEach-${newId}`)
-        if (checkForDefeat(changeToNumber, newId)) {
-            newSnake.setAttribute('class', `gridEachSnake`)
-        } else {
-            findSnake.classList.remove('gridEachSnake')
-            console.log("snake has hit a wall, time to reset")
-        }
-        findSnake.classList.remove('gridEachSnake')
-        // checkToAddSnake(findSnake)
-    }
+    console.log(e)
+    // ---------------------------find the element with snake class
+    let findSnake = document.querySelector('.gridEachSnake')
+    // -------------------------------------------Find the id of the associated snake element
+    let currentSnake = findSnake ? findSnake.id: null;
+    //----------------------------------------Split Id into word and number
+    const splitID = currentSnake.split('-')
+    //----------------------------Select the number part of the Id
+    hasBeenSplit = splitID[1];
+    //-------------------------------Ensures we are working with number and not a string
+    changeToNumber = hasBeenSplit * 1
+    
+    
+    switch (e) {
+        case "ArrowUp":
+             //-------------------------Depending on the direction, change Id to match corresponding new block
+             newId = changeToNumber - 25
+             console.log(newId)
+            break;
+        case "ArrowDown":
+            newId = changeToNumber + 25
+            console.log(newId)
+            break;
+        case "ArrowRight":
+            newId = changeToNumber + 1
+            console.log(newId)
+            break;
+        case "ArrowLeft":
+            newId = changeToNumber - 1
+            console.log(newId)
+            break;                    
+    };
+
+    //----------------------Checks to see if the movement would lead to defeat
+    console.log(checkForDefeat(changeToNumber, newId))
+    //-------------------------------------select element with the new Id
+    let newSnake = document.querySelector(`#gridEach-${newId}`)
+    //---------------------------------------------add the Snake class to the element
+    newSnake.setAttribute('class', `gridEachSnake`)
+    //-------------------------Check if a new element needs the snake class
+    findSnake.classList.remove('gridEachSnake')
+    // checkToAddSnake(findSnake)
+
+
+
+    // if (e == "ArrowUp") {
+    //     console.log(newId)
+    //     //----------------------Checks to see if the movement would lead to defeat
+    //     console.log(checkForDefeat(changeToNumber, newId))
+    //     //-------------------------------------select element with the new Id
+    //     newSnake.setAttribute('class', `gridEachSnake`)
+    //     //-------------------------Check if a new element needs the snake class
+    //     findSnake.classList.remove('gridEachSnake')
+    //     // checkToAddSnake(findSnake)
+    // } else if (e == "ArrowDown"){
+    //     let findSnake = document.querySelector('.gridEachSnake')
+    //     let currentSnake = findSnake ? findSnake.id: null;
+    //     const splitID = currentSnake.split('-')
+    //     hasBeenSplit = splitID[1];
+    //     changeToNumber = hasBeenSplit * 1
+    //     newId = changeToNumber + 25
+    //     checkForDefeat(changeToNumber, newId)
+    //     let newSnake = document.querySelector(`#gridEach-${newId}`)
+    //     newSnake.setAttribute('class', `gridEachSnake`)
+    //     findSnake.classList.remove('gridEachSnake')
+    //     // checkToAddSnake(findSnake)
+    // } else if (e == "ArrowRight") {
+    //     let findSnake = document.querySelector('.gridEachSnake')
+    //     let currentSnake = findSnake ? findSnake.id: null;
+    //     const splitID = currentSnake.split('-')
+    //     hasBeenSplit = splitID[1];
+    //     changeToNumber = hasBeenSplit * 1
+    //     newId = changeToNumber + 1
+    //     let newSnake = document.querySelector(`#gridEach-${newId}`)
+    //     if (checkForDefeat(changeToNumber, newId)) {
+    //         newSnake.setAttribute('class', `gridEachSnake`)
+    //     } else {
+    //         findSnake.classList.remove('gridEachSnake')
+    //         console.log("snake has hit a wall, time to reset")
+    //     }
+    //     findSnake.classList.remove('gridEachSnake')
+    //     // checkToAddSnake(findSnake)
+    // } else if (e == "ArrowLeft") {
+    //     let findSnake = document.querySelector('.gridEachSnake')
+    //     let currentSnake = findSnake ? findSnake.id: null;
+    //     const splitID = currentSnake.split('-')
+    //     hasBeenSplit = splitID[1];
+    //     changeToNumber = hasBeenSplit * 1
+    //     newId = changeToNumber - 1
+    //     let newSnake = document.querySelector(`#gridEach-${newId}`)
+    //     if (checkForDefeat(changeToNumber, newId)) {
+    //         newSnake.setAttribute('class', `gridEachSnake`)
+    //     } else {
+    //         findSnake.classList.remove('gridEachSnake')
+    //         console.log("snake has hit a wall, time to reset")
+    //     }
+    //     findSnake.classList.remove('gridEachSnake')
+    //     // checkToAddSnake(findSnake)
+    // }
+
 }
 
 
