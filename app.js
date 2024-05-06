@@ -105,63 +105,6 @@ const directionSnake = (e) => {
     findSnake.classList.remove('gridEachSnake')
     // checkToAddSnake(findSnake)
 
-
-
-    // if (e == "ArrowUp") {
-    //     console.log(newId)
-    //     //----------------------Checks to see if the movement would lead to defeat
-    //     console.log(checkForDefeat(changeToNumber, newId))
-    //     //-------------------------------------select element with the new Id
-    //     newSnake.setAttribute('class', `gridEachSnake`)
-    //     //-------------------------Check if a new element needs the snake class
-    //     findSnake.classList.remove('gridEachSnake')
-    //     // checkToAddSnake(findSnake)
-    // } else if (e == "ArrowDown"){
-    //     let findSnake = document.querySelector('.gridEachSnake')
-    //     let currentSnake = findSnake ? findSnake.id: null;
-    //     const splitID = currentSnake.split('-')
-    //     hasBeenSplit = splitID[1];
-    //     changeToNumber = hasBeenSplit * 1
-    //     newId = changeToNumber + 25
-    //     checkForDefeat(changeToNumber, newId)
-    //     let newSnake = document.querySelector(`#gridEach-${newId}`)
-    //     newSnake.setAttribute('class', `gridEachSnake`)
-    //     findSnake.classList.remove('gridEachSnake')
-    //     // checkToAddSnake(findSnake)
-    // } else if (e == "ArrowRight") {
-    //     let findSnake = document.querySelector('.gridEachSnake')
-    //     let currentSnake = findSnake ? findSnake.id: null;
-    //     const splitID = currentSnake.split('-')
-    //     hasBeenSplit = splitID[1];
-    //     changeToNumber = hasBeenSplit * 1
-    //     newId = changeToNumber + 1
-    //     let newSnake = document.querySelector(`#gridEach-${newId}`)
-    //     if (checkForDefeat(changeToNumber, newId)) {
-    //         newSnake.setAttribute('class', `gridEachSnake`)
-    //     } else {
-    //         findSnake.classList.remove('gridEachSnake')
-    //         console.log("snake has hit a wall, time to reset")
-    //     }
-    //     findSnake.classList.remove('gridEachSnake')
-    //     // checkToAddSnake(findSnake)
-    // } else if (e == "ArrowLeft") {
-    //     let findSnake = document.querySelector('.gridEachSnake')
-    //     let currentSnake = findSnake ? findSnake.id: null;
-    //     const splitID = currentSnake.split('-')
-    //     hasBeenSplit = splitID[1];
-    //     changeToNumber = hasBeenSplit * 1
-    //     newId = changeToNumber - 1
-    //     let newSnake = document.querySelector(`#gridEach-${newId}`)
-    //     if (checkForDefeat(changeToNumber, newId)) {
-    //         newSnake.setAttribute('class', `gridEachSnake`)
-    //     } else {
-    //         findSnake.classList.remove('gridEachSnake')
-    //         console.log("snake has hit a wall, time to reset")
-    //     }
-    //     findSnake.classList.remove('gridEachSnake')
-    //     // checkToAddSnake(findSnake)
-    // }
-
 }
 
 
