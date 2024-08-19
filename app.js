@@ -24,11 +24,12 @@ const generateGrid = () => {
     startSnake.setAttribute('class', `gridEachSnake`)
     let startButton = document.querySelector('.startGame');
     startButton.innerHTML = "Restart Game"
+    window.addEventListener('keydown', keydownListener)
 }
-//-------------------------------------------VV----------{Create listener for arrowkey press}
-window.addEventListener('keydown', event => {
+//-------------------------------------------VV----------{Create listener handler for arrowkey press}
+keydownListener = event => {
     const pressedKey = event.key
-    const arrowKeys = [" ","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"]
+    const arrowKeys = ["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"]
     let currentScore = document.querySelector('.actualSnakeScore')
     if(arrowKeys.includes(pressedKey)){
         console.log(pressedKey)
@@ -37,19 +38,20 @@ window.addEventListener('keydown', event => {
         if(delaySnake === null){
             snakeMoving()
         }
-        // directionSnake(snakeCurrentDirection)
-        // let findSnake = document.querySelector('.gridEachSnake')
-        // let currentSnake = findSnake ? findSnake.id: null;
-        // console.log(currentSnake)
-        // let currentApple = document.querySelector('.gridEachApple')
-        // if (currentApple === null) {
-            // let newApple = document.querySelector(`#gridEach-${Math.floor(Math.random() * 626)}`)
-            // newApple.setAttribute('class', 'gridEachApple')
-            // scoreTracker += 1
-            // currentScore.innerHTML = scoreTracker
+        directionSnake(snakeCurrentDirection)
+        let findSnake = document.querySelector('.gridEachSnake')
+        let currentSnake = findSnake ? findSnake.id: null;
+        console.log(currentSnake)
+        let currentApple = document.querySelector('.gridEachApple')
+        if (currentApple === null) {
+            let newApple = document.querySelector(`#gridEach-${Math.floor(Math.random() * 626)}`)
+            newApple.setAttribute('class', 'gridEachApple')
+            scoreTracker += 1
+            currentScore.innerHTML = scoreTracker
+        }
     }
-})
-
+}
+//---------------------------------------------VV----------{actual listener using the keydownListener function}
 const snakeMoving = () => {
     delaySnake = setInterval(() => {
         if (snakeCurrentDirection) {
@@ -103,7 +105,7 @@ const directionSnake = (e) => {
     newSnake.setAttribute('class', `gridEachSnake`)
     //-------------------------Check if a new element needs the snake class
     findSnake.classList.remove('gridEachSnake')
-    // checkToAddSnake(findSnake)
+    checkToAddSnake(findSnake)
 
 }
 
@@ -150,6 +152,7 @@ const youAreDefeated = () => {
     alert("That Path Lead to your Defeat")
     let startButton = document.querySelector('.startGame');
     startButton.innerHTML = "Try Again?"
-    generateGrid()
-    // return 
+    window.removeEventListener('keydown', keydownListener)
+    clearInterval(delaySnake)
+    delaySnake = null;
 }
