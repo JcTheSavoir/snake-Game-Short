@@ -4,7 +4,9 @@ let scoreTracker = 0
 let snakeCurrentDirection = null;
 //---------------------{Variable to assist in delaying snake movement}
 let delaySnake = null;
-console.log(delaySnake)
+// console.log(delaySnake)
+//-------------------------------{Variable to keep track of head of snake}
+let newId = null;
 
 // -------------------------------------------VV---------{Create grid for game}
 const generateGrid = () => {
@@ -60,11 +62,20 @@ const snakeMoving = () => {
 
 //-------------------------------------------VV----------{snake direction controls}
 const directionSnake = (e) => {
+    let findSnake = null
     console.log(e)
-    // ---------------------------find the element with snake class
-    let findSnake = document.querySelector('.gridEachSnake')
+    // PART 1 ---------------------------find the element with snake class when game first starts
+    if (newId === null) {
+        console.log(newId)
+        findSnake = document.querySelector('.gridEachSnake')
+    // PART 2 ---------------------------find the element with snake class that is the original starting piece
+    } else { 
+        findSnake = document.querySelector(`.gridEachSnake#gridEach-${newId}`)
+        console.log(findSnake)
+    }
     // -------------------------------------------Find the id of the associated snake element
     let currentSnake = findSnake ? findSnake.id: null;
+    console.log(currentSnake)
     //----------------------------------------Split Id into word and number
     const splitID = currentSnake.split('-')
     //----------------------------Select the number part of the Id
@@ -110,7 +121,7 @@ const checkToAddSnake = (theSnake) => {
     let currentLength = document.querySelector('.actualSnakeLength')
     
     if ((snakeLength - scoreTracker) - 1 === 0 || scoreTracker > (snakeLength + 2)) {
-        theSnake.classList.remove('gridEachSnake')  //--comment out this line to allow snake to grow
+        // theSnake.classList.remove('gridEachSnake')  //--comment out this line to allow snake to grow
         const snakeLength = document.querySelectorAll('.gridEachSnake').length
         console.log(`The number of snakes is ${snakeLength}`)
         currentLength.innerHTML = snakeLength
