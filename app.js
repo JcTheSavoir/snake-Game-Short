@@ -24,6 +24,15 @@ const generateGrid = () => {
     startSnake.setAttribute('class', `gridEachSnake`)
     let startButton = document.querySelector('.startGame');
     startButton.innerHTML = "Restart Game"
+    scoreTracker = 0
+    let currentScore = document.querySelector('.actualSnakeScore')
+    let currentLength = document.querySelector('.actualSnakeLength')
+    currentLength.innerHTML = 1
+    currentScore.innerHTML = 0
+    window.removeEventListener('keydown', keydownListener)
+    clearInterval(delaySnake)
+    delaySnake = null;
+    newId = null;
     window.addEventListener('keydown', keydownListener)
 }
 //-------------------------------------------VV----------{Create listener handler for arrowkey press}
@@ -35,9 +44,10 @@ keydownListener = event => {
         console.log(pressedKey)
         event.preventDefault()
         snakeCurrentDirection = pressedKey;
-        if(delaySnake === null){
-            snakeMoving()
-        }
+        // if(delaySnake === null){
+        //     snakeMoving()
+        // //-----------------------comment out this if statement if snake should not move on it's own (for testing)
+        // }
         directionSnake(snakeCurrentDirection)
         let findSnake = document.querySelector('.gridEachSnake')
         let currentSnake = findSnake ? findSnake.id: null;
@@ -63,6 +73,7 @@ const snakeMoving = () => {
 //-------------------------------------------VV----------{snake direction controls}
 const directionSnake = (e) => {
     let findSnake = null
+    console.log(newId)
     console.log(e)
     // PART 1 ---------------------------find the element with snake class when game first starts
     if (newId === null) {
@@ -118,6 +129,8 @@ const directionSnake = (e) => {
 //-------------------------------------VV--------------{check if new snake is needed}
 const checkToAddSnake = (theSnake) => {
     const snakeLength = document.querySelectorAll('.gridEachSnake').length
+    console.log(snakeLength);
+    
     let currentLength = document.querySelector('.actualSnakeLength')
     
     if ((snakeLength - scoreTracker) - 1 === 0 || scoreTracker > (snakeLength + 2)) {
@@ -163,4 +176,6 @@ const youAreDefeated = () => {
     window.removeEventListener('keydown', keydownListener)
     clearInterval(delaySnake)
     delaySnake = null;
+    newId = null;
+    console.log(newId)
 }
