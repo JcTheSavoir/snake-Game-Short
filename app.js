@@ -11,8 +11,6 @@ const generateGrid = () => {
     console.log("generateGrid started")
     let gridItself = document.querySelector('#gridItself');
     gridItself.innerHTML = "";
-    let currentScore = document.querySelector('.actualSnakeScore')
-    currentScore.innerHTML = "";
     for (let i = 0; i < 625; i++) {
         let gridEach = document.createElement('div')
         gridEach.setAttribute('id', `gridEach-${i}`)
@@ -60,9 +58,7 @@ const snakeMoving = () => {
     }, 500);
 }
 
-
 //-------------------------------------------VV----------{snake direction controls}
-
 const directionSnake = (e) => {
     console.log(e)
     // ---------------------------find the element with snake class
@@ -75,8 +71,7 @@ const directionSnake = (e) => {
     hasBeenSplit = splitID[1];
     //-------------------------------Ensures we are working with number and not a string
     changeToNumber = hasBeenSplit * 1
-    
-    
+
     switch (e) {
         case "ArrowUp":
              //-------------------------Depending on the direction, change Id to match corresponding new block
@@ -96,7 +91,6 @@ const directionSnake = (e) => {
             console.log(newId)
             break;                    
     };
-
     //----------------------Checks to see if the movement would lead to defeat
     console.log(checkForDefeat(changeToNumber, newId))
     //-------------------------------------select element with the new Id
@@ -104,19 +98,22 @@ const directionSnake = (e) => {
     //---------------------------------------------add the Snake class to the element
     newSnake.setAttribute('class', `gridEachSnake`)
     //-------------------------Check if a new element needs the snake class
-    findSnake.classList.remove('gridEachSnake')
+    // findSnake.classList.remove('gridEachSnake')
     checkToAddSnake(findSnake)
-
 }
 
 
 
 //-------------------------------------VV--------------{check if new snake is needed}
 const checkToAddSnake = (theSnake) => {
-    const allSnakes = document.querySelectorAll('.gridEachSnake').length
-    if ((allSnakes - scoreTracker) - 1 === 0 || scoreTracker > (allSnakes + 2)) {
-        console.log(`The number of snakes is ${allSnakes}`)
-        theSnake.classList.remove('gridEachSnake')
+    const snakeLength = document.querySelectorAll('.gridEachSnake').length
+    let currentLength = document.querySelector('.actualSnakeLength')
+    
+    if ((snakeLength - scoreTracker) - 1 === 0 || scoreTracker > (snakeLength + 2)) {
+        theSnake.classList.remove('gridEachSnake')  //--comment out this line to allow snake to grow
+        const snakeLength = document.querySelectorAll('.gridEachSnake').length
+        console.log(`The number of snakes is ${snakeLength}`)
+        currentLength.innerHTML = snakeLength
     }else{
         theSnake.classList.remove('gridEachSnake')
     }
@@ -131,11 +128,11 @@ const checkForDefeat = (a, b) => {
         const defeatArrayLeft = [0] 
         const defeatArrayRight = [24]
     for (let i = 0; i < 24; i++) {
-        //have array with all instances of defeat if moving left to right
+        //--------have array with all instances of defeat if moving left to right
         const lastIndexLeft = defeatArrayLeft.length - 1;
         const lastElementArrayLeft = defeatArrayLeft[lastIndexLeft]
         defeatArrayLeft.push(lastElementArrayLeft + 25)
-        //have array with all instances of defeat if moving right to left
+        //--------have array with all instances of defeat if moving right to left
         const lastIndexRight = defeatArrayRight.length - 1;
         const lastElementArrayRight = defeatArrayRight[lastIndexRight]
         defeatArrayRight.push(lastElementArrayRight + 25)
