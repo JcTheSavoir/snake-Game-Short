@@ -7,6 +7,8 @@ let delaySnake = null;
 // console.log(delaySnake)
 //-------------------------------{Variable to keep track of head of snake}
 let newId = null;
+//-------------------------------{Variable to keep track of body of snake}
+let snakeBody = []
 
 // -------------------------------------------VV---------{Create grid for game}
 const generateGrid = () => {
@@ -16,6 +18,7 @@ const generateGrid = () => {
     for (let i = 0; i < 625; i++) {
         let gridEach = document.createElement('div')
         gridEach.setAttribute('id', `gridEach-${i}`)
+        gridEach.innerHTML = i
         gridItself.append(gridEach)
     }
     let startSnake = document.querySelector("#gridEach-305")
@@ -41,17 +44,15 @@ keydownListener = event => {
     const arrowKeys = ["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"]
     let currentScore = document.querySelector('.actualSnakeScore')
     if(arrowKeys.includes(pressedKey)){
-        console.log(pressedKey)
         event.preventDefault()
         snakeCurrentDirection = pressedKey;
-        // if(delaySnake === null){
-        //     snakeMoving()
-        // //-----------------------comment out this if statement if snake should not move on it's own (for testing)
-        // }
-        directionSnake(snakeCurrentDirection)
+        if(delaySnake === null){
+            snakeMoving()
+        //-----------------------comment out this if statement if snake should not move on it's own (for testing)
+        }
+        directionSnakeHead(snakeCurrentDirection)
         let findSnake = document.querySelector('.gridEachSnake')
         let currentSnake = findSnake ? findSnake.id: null;
-        console.log(currentSnake)
         let currentApple = document.querySelector('.gridEachApple')
         if (currentApple === null) {
             let newApple = document.querySelector(`#gridEach-${Math.floor(Math.random() * 626)}`)
@@ -65,15 +66,14 @@ keydownListener = event => {
 const snakeMoving = () => {
     delaySnake = setInterval(() => {
         if (snakeCurrentDirection) {
-            directionSnake(snakeCurrentDirection)
+            directionSnakeHead(snakeCurrentDirection)
         }
     }, 500);
 }
 
 //-------------------------------------------VV----------{snake direction controls}
-const directionSnake = (e) => {
+const directionSnakeHead = (e) => {
     let findSnake = null
-    console.log(newId)
     console.log(e)
     // PART 1 ---------------------------find the element with snake class when game first starts
     if (newId === null) {
@@ -86,33 +86,33 @@ const directionSnake = (e) => {
     }
     // -------------------------------------------Find the id of the associated snake element
     let currentSnake = findSnake ? findSnake.id: null;
-    console.log(currentSnake)
     //----------------------------------------Split Id into word and number
     const splitID = currentSnake.split('-')
     //----------------------------Select the number part of the Id
     hasBeenSplit = splitID[1];
     //-------------------------------Ensures we are working with number and not a string
     changeToNumber = hasBeenSplit * 1
-
+    //-------------------------------Saves the "newId" variable before it's changed from movement, in order to pass it to the snakebody function
+    let pastId = newId
     switch (e) {
         case "ArrowUp":
              //-------------------------Depending on the direction, change Id to match corresponding new block
              newId = changeToNumber - 25
-             console.log(newId)
+            //  console.log(newId)
             break;
         case "ArrowDown":
             newId = changeToNumber + 25
-            console.log(newId)
+            // console.log(newId)
             break;
         case "ArrowRight":
             newId = changeToNumber + 1
-            console.log(newId)
+            // console.log(newId)
             break;
         case "ArrowLeft":
             newId = changeToNumber - 1
-            console.log(newId)
             break;                    
-    };
+        };
+    console.log(newId)
     //----------------------Checks to see if the movement would lead to defeat
     console.log(checkForDefeat(changeToNumber, newId))
     //-------------------------------------select element with the new Id
@@ -121,7 +121,20 @@ const directionSnake = (e) => {
     newSnake.setAttribute('class', `gridEachSnake`)
     //-------------------------Check if a new element needs the snake class
     // findSnake.classList.remove('gridEachSnake')
-    checkToAddSnake(findSnake)
+    checkToAddSnake(findSnake);
+    //----------------------Keeps track of the snakesbody
+    let snakeBodyArrays = directionSnakeBody(newId, pastId, findSnake);
+    console.log(snakeBodyArrays);
+    let bodyLength = snakeBodyArrays.length;
+    //----------------------Create Snake Body
+    let i = 0;
+    while (i < bodyLength) {
+        let newSnakeBody = document.querySelector(`#gridEach-${snakeBodyArrays[i]}`)
+        console.log(newSnakeBody)
+        newSnakeBody.setAttribute('class', 'gridEachSnake')
+        i++
+    }
+
 }
 
 
@@ -129,10 +142,8 @@ const directionSnake = (e) => {
 //-------------------------------------VV--------------{check if new snake is needed}
 const checkToAddSnake = (theSnake) => {
     const snakeLength = document.querySelectorAll('.gridEachSnake').length
-    console.log(snakeLength);
-    
+    console.log(snakeLength)
     let currentLength = document.querySelector('.actualSnakeLength')
-    
     if ((snakeLength - scoreTracker) - 1 === 0 || scoreTracker > (snakeLength + 2)) {
         // theSnake.classList.remove('gridEachSnake')  //--comment out this line to allow snake to grow
         const snakeLength = document.querySelectorAll('.gridEachSnake').length
@@ -178,4 +189,35 @@ const youAreDefeated = () => {
     delaySnake = null;
     newId = null;
     console.log(newId)
+}
+
+//------------------------------------------------------{Function for moving non head section of the snake}
+
+const directionSnakeBody = (a,b,c) => {
+    const snakeLength = document.querySelectorAll('.gridEachSnake').length
+    console.log(snakeLength)
+    console.log(`Snake Length: ${snakeLength}`)
+    console.log(`Snake Body: ${snakeBody}`)
+    console.log(`SnakeBody Length: ${snakeBody.length}`)
+    if (snakeLength >= 2 && b != null) {
+        snakeBody.unshift(b)
+        console.log(`Snake Length unshift: ${snakeLength}`)
+        console.log(`SnakeBody Length unshift:${snakeBody.length}`)
+        console.log(`Snake Body unshift:${snakeBody}`)
+    }
+    if (snakeBody.length >= snakeLength && snakeBody.length > 1) {
+        let snakeRemove = (snakeBody.pop() * 1)
+        console.log(snakeRemove)
+        let snakeBodyRemoved = document.querySelector(`#gridEach-${snakeRemove}`)
+        console.log(snakeBodyRemoved)
+        snakeBodyRemoved.classList.remove('gridEachSnake')
+        console.log(`Snake Length pop: ${snakeLength}`)
+        console.log(`SnakeBody Length pop:${snakeBody.length}`)
+        console.log(`Snake Body pop:${snakeBody}`)
+
+
+    }
+    console.log(snakeBody)
+    console.log(snakeBody.length) 
+    return snakeBody
 }

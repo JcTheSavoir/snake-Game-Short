@@ -46,16 +46,17 @@ body{
     width: 100%;
     grid-template-columns: repeat(25, 1fr) ;
     grid-template-rows: repeat(25, 1fr) ;
-    background-color: black;
+    background-color: white;
 }
 #gridItself > *{
     aspect-ratio: 1/1;
     border: solid purple;
     border-width: 0.1px;
+    font-size: small;
 }
 .gridEachSnake{
     aspect-ratio: 1/1;
-    background-color: white;
+    background-color: green;
     border-width: 0.1px;
 }
 .gridEachApple{
