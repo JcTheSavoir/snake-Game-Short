@@ -3,7 +3,6 @@ let snakeCurrentDirection = null; //---------------------------------{Variable t
 let delaySnake = null; //---------------------{Variable to assist in delaying snake movement}
 let newId = null; //-------------------------------{Variable to keep track of head of snake}
 let snakeBodies = []; //-------------------------------{Variable to keep track of body of snake}
-let possibleApples
 // -------------------------------------------VV---------{Create grid for game}
 const generateGrid = () => {
     let gridItself = document.querySelector('#gridItself');
@@ -31,10 +30,10 @@ keydownListener = event => {
     if(arrowKeys.includes(pressedKey)){
         event.preventDefault();
         snakeCurrentDirection = pressedKey;
-        if(delaySnake === null){
-            snakeMoving();
-        //-----------------------comment out this if statement if snake should not move on it's own (for testing)
-        };
+        // if(delaySnake === null){
+        //     snakeMoving();
+        // //-----------------------comment out this if statement if snake should not move on it's own (for testing)
+        // };
         directionSnakeHead(snakeCurrentDirection);
     };
 };
@@ -64,7 +63,7 @@ const directionSnakeHead = (e) => {
     switch (e) {
         //-------------------------Depending on the direction, change Id to match corresponding new block
         case "ArrowUp":
-             newId = changeToNumber - 25;
+            newId = changeToNumber - 25;
             break;
         case "ArrowDown":
             newId = changeToNumber + 25;
@@ -78,6 +77,7 @@ const directionSnakeHead = (e) => {
     };
     checkForDefeat(changeToNumber, newId); //----------------------Checks to see if the movement would lead to defeat
     let newSnake = document.querySelector(`#gridEach-${newId}`); //-------------------------------------select element with the new Id
+    console.log(`Adding snake head at ${newId}`)
     newSnake.setAttribute('class', `gridEachSnake`); //---------------------------------------------add the Snake class to the element
     checkToAddSnake(findSnake); //-------------------------Check if a new element needs the snake class
     let snakeBodyArrays = directionSnakeBody(pastId); //----------------------Keeps track of the snakeBodies
@@ -101,6 +101,45 @@ const checkToAddSnake = (theSnake) => {
         currentLength.innerHTML = snakeLength;
     }else{
         theSnake.classList.remove('gridEachSnake');
+    };
+};
+//------------------------------------------------------{Function for moving non head section of the snake (with a check of defeat if snake eats itself)}
+const directionSnakeBody = (pastId) => {
+    const snakeLength = document.querySelectorAll('.gridEachSnake').length;
+    if (snakeLength >= 2 && pastId != null) {
+        if (snakeBodies.includes(pastId)) {
+            //if snake body already has that part, then the snake has eaten itself, thus triggering defeat
+            youAreDefeated()
+            return;
+        } else {
+            // if snake body does not already have that id, then it will be added as normal
+            console.log(`Adding snake body at ${pastId}`)
+            snakeBodies.unshift(pastId);
+        }
+    };
+    if (snakeBodies.length >= snakeLength && snakeBodies.length > 1) {
+        let snakeRemove = (snakeBodies.pop() * 1);
+        console.log(`Removing snake body at ${snakeRemove}`)
+        let snakeBodyRemoved = document.querySelector(`#gridEach-${snakeRemove}`);
+        snakeBodyRemoved.classList.remove('gridEachSnake');
+    }
+    return snakeBodies;
+};
+//----------------------------------------------------{Function for adding new apples to board}
+const createApple = (snakeBodyArrays) => {
+    /* ---------- If issues arise once snakes start getting longer (over 200 lengths or so) 
+    then this function will need reworked to ensure that new apples are only created on grid spaces that are not occupied by the snake class
+1). Use the 'for loop' that creates the initial grid, to also create an array of numbers from 0 to 624.  Then compare that array with
+    the array that keeps track of the snakes body.
+2). Use a new loop inside this function.  Inside the loop we will have the Math.random for apple generation, compare the result with the array of snake body, 
+    if the new apple would occupy the snake, then redo it.  (This option seems like the worse of the two.  Because as the snake gets longer, the loop will begin to run more and more often because there is less space fore the apple to be created)*/
+    let currentScore = document.querySelector('.actualSnakeScore');
+    let currentApple = document.querySelector('.gridEachApple');
+    if (currentApple === null) {
+        let newApple = document.querySelector(`#gridEach-${Math.floor(Math.random() * 626)}`);
+        newApple.setAttribute('class', 'gridEachApple');
+        scoreTracker += 1;
+        currentScore.innerHTML = scoreTracker;
     };
 };
 //-------------------------------------------{Function to check for defeat from wall}
@@ -134,36 +173,6 @@ const youAreDefeated = () => {
     let startButton = document.querySelector('.startGame');
     startButton.innerHTML = "Try Again?";
     resetVariables();
-};
-//------------------------------------------------------{Function for moving non head section of the snake}
-const directionSnakeBody = (pastId) => {
-    const snakeLength = document.querySelectorAll('.gridEachSnake').length;
-    if (snakeLength >= 2 && pastId != null) {
-        snakeBodies.unshift(pastId);
-    };
-    if (snakeBodies.length >= snakeLength && snakeBodies.length > 1) {
-        let snakeRemove = (snakeBodies.pop() * 1);
-        let snakeBodyRemoved = document.querySelector(`#gridEach-${snakeRemove}`);
-        snakeBodyRemoved.classList.remove('gridEachSnake');
-    }
-    return snakeBodies;
-};
-//----------------------------------------------------{Function for adding new apples to board}
-const createApple = (snakeBodyArrays) => {
-    /* ---------- If issues arise once snakes start getting longer (over 200 lengths or so) 
-    then this function will need reworked to ensure that new apples are only created on grid spaces that are not occupied by the snake class
-1). Use the 'for loop' that creates the initial grid, to also create an array of numbers from 0 to 624.  Then compare that array with
-    the array that keeps track of the snakes body.
-2). Use a new loop inside this function.  Inside the loop we will have the Math.random for apple generation, compare the result with the array of snake body, 
-    if the new apple would occupy the snake, then redo it.  (This option seems like the worse of the two.  Because as the snake gets longer, the loop will begin to run more and more often because there is less space fore the apple to be created)*/
-    let currentScore = document.querySelector('.actualSnakeScore');
-    let currentApple = document.querySelector('.gridEachApple');
-    if (currentApple === null) {
-        let newApple = document.querySelector(`#gridEach-${Math.floor(Math.random() * 626)}`);
-        newApple.setAttribute('class', 'gridEachApple');
-        scoreTracker += 1;
-        currentScore.innerHTML = scoreTracker;
-    };
 };
 //----------------------------------------------------{Function for resetting variables}
 const resetVariables = () => {
