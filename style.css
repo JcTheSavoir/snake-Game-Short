@@ -34,19 +34,21 @@ body{
 }
 .gameContainer{
     border: solid red;
-    width: 50%;
+    display: flex;
+    flex-direction: column;
+    /* width: 50%; */
 }
 .gridContainer{
     border: solid green;
     width: 100%;
-    /* aspect-ratio: 1/1; */
+    aspect-ratio: 1/1;
 }
 #gridItself{
     display: grid;
     width: 100%;
     grid-template-columns: repeat(25, 1fr) ;
     grid-template-rows: repeat(25, 1fr) ;
-    background-color: white;
+    background-color: black;
 }
 #gridItself > *{
     aspect-ratio: 1/1;
