@@ -30,10 +30,10 @@ keydownListener = event => {
     if(arrowKeys.includes(pressedKey)){
         event.preventDefault();
         snakeCurrentDirection = pressedKey;
-        // if(delaySnake === null){
-        //     snakeMoving();
-        // //-----------------------comment out this if statement if snake should not move on it's own (for testing)
-        // };
+        if(delaySnake === null){
+            snakeMoving();
+        //-----------------------comment out this if statement if snake should not move on it's own (for testing)
+        };
         directionSnakeHead(snakeCurrentDirection);
     };
 };
@@ -78,7 +78,6 @@ const directionSnakeHead = (e) => {
     checkForDefeat(changeToNumber, newId); //----------------------Checks to see if the movement would lead to defeat
     let newSnake = document.querySelector(`#gridEach-${newId}`); //-------------------------------------select element with the new Id    
     newSnake.setAttribute('class', `gridEachSnake`); //---------------------------------------------add the Snake class to the element
-    console.log(`Adding snake head at ${newId}`)
     checkToAddSnake(findSnake); //-------------------------Check if a new element needs the snake class
     let snakeBodyArrays = directionSnakeBody(pastId, newId); //----------------------Keeps track of the snakeBodies
     createApple(snakeBodyArrays);
@@ -107,10 +106,7 @@ const checkToAddSnake = (theSnake) => {
 const directionSnakeBody = (pastId, newId) => {
     const snakeLength = document.querySelectorAll('.gridEachSnake').length;
     if (snakeLength >= 2 && pastId != null) {
-        console.log(snakeBodies)
-        console.log(pastId)
-        // if snake body does not already have that id, then it will be added as normal
-        console.log(`Adding snake body at ${pastId}`)
+        // adds the id of where snake head was, to the snake bodies array
         snakeBodies.unshift(pastId);
     };
     if (snakeBodies.length >= snakeLength && snakeBodies.length > 1) {
@@ -119,14 +115,12 @@ const directionSnakeBody = (pastId, newId) => {
         if (snakeRemove === newId) {
             console.log('snake head has same ID as previous end of snake, not removing class.')
         } else {
-            console.log(`Removing snake body at ${snakeRemove}`)
             let snakeBodyRemoved = document.querySelector(`#gridEach-${snakeRemove}`);
             snakeBodyRemoved.classList.remove('gridEachSnake');
         }
     }
     if (snakeBodies.includes(newId)) {
         //if snake body already has that part, then the snake has eaten itself, thus triggering defeat
-        console.log("about to be defeated")
         youAreDefeated()
     }
     return snakeBodies;
