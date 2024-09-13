@@ -82,9 +82,12 @@ const directionSnakeHead = (e) => {
     let snakeBodyArrays = directionSnakeBody(pastId, newId); //----------------------Keeps track of the snakeBodies
     createApple(snakeBodyArrays);
     let bodyLength = snakeBodyArrays.length;
-    //----------------VV------Create Snake Body
+//----------------VV------Create Snake Body {TEMPORARY}
+//------------------------Until the issue of the apple being able to spawn inside the snake is fixed, this while loop will need to stay.  
+//------------------------It's a bit repetitive with the snakeBodyAdd in directionSnakeBody, but until apple is resolved, this prevents an issue that would be more obvious to the user
     let i = 0;
     while (i < bodyLength) {
+        console.log(`while loop ${i}`)
         let newSnakeBody = document.querySelector(`#gridEach-${snakeBodyArrays[i]}`);
         newSnakeBody.setAttribute('class', 'gridEachSnake');
         i++;
@@ -106,8 +109,10 @@ const checkToAddSnake = (theSnake) => {
 const directionSnakeBody = (pastId, newId) => {
     const snakeLength = document.querySelectorAll('.gridEachSnake').length;
     if (snakeLength >= 2 && pastId != null) {
-        // adds the id of where snake head was, to the snake bodies array
+        // adds the id of where snake head was, to the snake bodies array, as well as ensuring that body piece keeps the correct class
         snakeBodies.unshift(pastId);
+        let snakeBodyAdd = document.querySelector(`#gridEach-${pastId}`)
+        snakeBodyAdd.classList.add('gridEachSnake');
     };
     if (snakeBodies.length >= snakeLength && snakeBodies.length > 1) {
         let snakeRemove = (snakeBodies.pop() * 1);
