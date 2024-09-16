@@ -56,10 +56,21 @@ body{
     border-width: 0.1px;
     font-size: small;
 }
-.gridEachSnake{
+.gridEachSnakeBody{
     aspect-ratio: 1/1;
     background-color: green;
     border-width: 0.1px;
+}
+.gridEachSnakeHead{
+    aspect-ratio: 1/1;
+    background-image: url(/images/headSnake.png);
+    color: transparent;
+    background-size:contain;
+    /* transform: rotate(-90deg); */
+    background-repeat: no-repeat;
+    border-width: 0.1px;
+
+
 }
 .gridEachApple{
     aspect-ratio: 1/1;

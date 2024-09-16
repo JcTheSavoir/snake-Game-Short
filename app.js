@@ -17,7 +17,7 @@ const generateGrid = () => {
     let startSnake = document.querySelector("#gridEach-305");
     let startApple = document.querySelector(`#gridEach-${Math.floor(Math.random() * 626)}`);
     startApple.setAttribute('class', 'gridEachApple');
-    startSnake.setAttribute('class', `gridEachSnake`);
+    startSnake.setAttribute('class', `gridEachSnakeBody`);
     let startButton = document.querySelector('.startGame');
     startButton.innerHTML = "Restart Game";
     resetVariables();
@@ -50,10 +50,10 @@ const directionSnakeHead = (e) => {
     let findSnake = null;
 // PART 1 ---------------------------find the element with snake class when grid is created
     if (newId === null) {
-        findSnake = document.querySelector('.gridEachSnake');
+        findSnake = document.querySelector('.gridEachSnakeBody');
 // PART 2 ---------------------------If grid is already made, track movement of the original snake
     } else { 
-        findSnake = document.querySelector(`.gridEachSnake#gridEach-${newId}`);
+        findSnake = document.querySelector(`.gridEachSnakeBody#gridEach-${newId}`);
     };
     let currentSnake = findSnake ? findSnake.id: null; // -------------------------------------------Find the id of the associated snake element
     const splitID = currentSnake.split('-'); //----------------------------------------Split Id into word and number
@@ -77,7 +77,7 @@ const directionSnakeHead = (e) => {
     };
     checkForDefeat(changeToNumber, newId); //----------------------Checks to see if the movement would lead to defeat
     let newSnake = document.querySelector(`#gridEach-${newId}`); //-------------------------------------select element with the new Id    
-    newSnake.setAttribute('class', `gridEachSnake`); //---------------------------------------------add the Snake class to the element
+    newSnake.setAttribute('class', `gridEachSnakeBody`); //---------------------------------------------add the Snake class to the element
     checkToAddSnake(findSnake); //-------------------------Check if a new element needs the snake class
     let snakeBodyArrays = directionSnakeBody(pastId, newId); //----------------------Keeps track of the snakeBodies
     createApple(snakeBodyArrays);
@@ -89,30 +89,30 @@ const directionSnakeHead = (e) => {
     while (i < bodyLength) {
         console.log(`while loop ${i}`)
         let newSnakeBody = document.querySelector(`#gridEach-${snakeBodyArrays[i]}`);
-        newSnakeBody.setAttribute('class', 'gridEachSnake');
+        newSnakeBody.setAttribute('class', 'gridEachSnakeBody');
         i++;
     };
 };
 //-------------------------------------VV--------------{check if new snake is needed}
 const checkToAddSnake = (theSnake) => {
-    const snakeLength = document.querySelectorAll('.gridEachSnake').length;
+    const snakeLength = document.querySelectorAll('.gridEachSnakeBody').length;
     let currentLength = document.querySelector('.actualSnakeLength');
     if ((snakeLength - scoreTracker) - 1 === 0 || scoreTracker > (snakeLength + 2)) {
-        // theSnake.classList.remove('gridEachSnake')  //--comment out this line to allow snake to grow
-        const snakeLength = document.querySelectorAll('.gridEachSnake').length;
+        // theSnake.classList.remove('gridEachSnakeBody')  //--comment out this line to allow snake to grow
+        const snakeLength = document.querySelectorAll('.gridEachSnakeBody').length;
         currentLength.innerHTML = snakeLength;
     }else{
-        theSnake.classList.remove('gridEachSnake');
+        theSnake.classList.remove('gridEachSnakeBody');
     };
 };
 //------------------------------------------------------{Function for moving non head section of the snake (with a check of defeat if snake eats itself)}
 const directionSnakeBody = (pastId, newId) => {
-    const snakeLength = document.querySelectorAll('.gridEachSnake').length;
+    const snakeLength = document.querySelectorAll('.gridEachSnakeBody').length;
     if (snakeLength >= 2 && pastId != null) {
         // adds the id of where snake head was, to the snake bodies array, as well as ensuring that body piece keeps the correct class
         snakeBodies.unshift(pastId);
         let snakeBodyAdd = document.querySelector(`#gridEach-${pastId}`)
-        snakeBodyAdd.classList.add('gridEachSnake');
+        snakeBodyAdd.classList.add('gridEachSnakeBody');
     };
     if (snakeBodies.length >= snakeLength && snakeBodies.length > 1) {
         let snakeRemove = (snakeBodies.pop() * 1);
@@ -121,7 +121,7 @@ const directionSnakeBody = (pastId, newId) => {
             console.log('snake head has same ID as previous end of snake, not removing class.')
         } else {
             let snakeBodyRemoved = document.querySelector(`#gridEach-${snakeRemove}`);
-            snakeBodyRemoved.classList.remove('gridEachSnake');
+            snakeBodyRemoved.classList.remove('gridEachSnakeBody');
         }
     }
     if (snakeBodies.includes(newId)) {
