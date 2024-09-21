@@ -9,7 +9,6 @@ const generateGrid = () => {
     let gridItself = document.querySelector('#gridItself');
     gridItself.innerHTML = "";
     appleTrackArray = [];
-    console.log(appleTrackArray)
     for (let i = 0; i < 625; i++) {
         // delayGrid(i) // This shows the grid being generated on element at a time.  Game will not work if this is active
         let gridEach = document.createElement('div');
@@ -18,9 +17,8 @@ const generateGrid = () => {
         gridEach.innerHTML = i;
         gridItself.append(gridEach);
     };
-    console.log(appleTrackArray)
     let startSnake = document.querySelector("#gridEach-305");
-    let startApple = document.querySelector(`#gridEach-${Math.floor(Math.random() * 626)}`);
+    let startApple = document.querySelector(`#gridEach-320`);
     startApple.setAttribute('class', 'gridEachApple');
     startSnake.setAttribute('class', `gridEachSnakeBody`);
     let startButton = document.querySelector('.startGame');
@@ -85,18 +83,7 @@ const directionSnakeHead = (e) => {
     newSnake.setAttribute('class', `gridEachSnakeBody`); //---------------------------------------------add the Snake class to the element
     checkToAddSnake(findSnake); //-------------------------Check if a new element needs the snake class
     let snakeBodyArrays = directionSnakeBody(pastId, newId); //----------------------Keeps track of the snakeBodies
-    createApple(snakeBodyArrays);
-    let bodyLength = snakeBodyArrays.length;
-//----------------VV------Create Snake Body {TEMPORARY}
-//------------------------Until the issue of the apple being able to spawn inside the snake is fixed, this while loop will need to stay.  
-//------------------------It's a bit repetitive with the snakeBodyAdd in directionSnakeBody, but until apple is resolved, this prevents an issue that would be more obvious to the user
-    let i = 0;
-    while (i < bodyLength) {
-        console.log(`while loop ${i}`)
-        let newSnakeBody = document.querySelector(`#gridEach-${snakeBodyArrays[i]}`);
-        newSnakeBody.setAttribute('class', 'gridEachSnakeBody');
-        i++;
-    };
+    createApple(snakeBodies, newId);
 };
 //-------------------------------------VV--------------{check if new snake is needed}
 const checkToAddSnake = (theSnake) => {
@@ -136,17 +123,25 @@ const directionSnakeBody = (pastId, newId) => {
     return snakeBodies;
 };
 //----------------------------------------------------{Function for adding new apples to board}
-const createApple = (snakeBodyArrays) => {
-    /* ---------- If issues arise once snakes start getting longer (over 200 lengths or so) 
-    then this function will need reworked to ensure that new apples are only created on grid spaces that are not occupied by the snake class
-1). Use the 'for loop' that creates the initial grid, to also create an array of numbers from 0 to 624.  Then compare that array with
-    the array that keeps track of the snakes body.
-2). Use a new loop inside this function.  Inside the loop we will have the Math.random for apple generation, compare the result with the array of snake body, 
-    if the new apple would occupy the snake, then redo it.  (This option seems like the worse of the two.  Because as the snake gets longer, the loop will begin to run more and more often because there is less space fore the apple to be created)*/
+const createApple = (snakeBodies, snakeHead) => {
     let currentScore = document.querySelector('.actualSnakeScore');
     let currentApple = document.querySelector('.gridEachApple');
+    // -----------VV-----{If there is no apple currently (right after the snake eats it), then a new apple will be created}
     if (currentApple === null) {
-        let newApple = document.querySelector(`#gridEach-${Math.floor(Math.random() * 626)}`);
+        /* Using the filter option to create a new array that includes all grid Id's except for the snakes head (newid) and 
+        snake body (snakeBodies) positions*/
+        let whereCanAppleSpawn = appleTrackArray.filter(grid =>
+            !snakeBodies.includes(grid) && grid !== snakeHead
+        ); //-----similar to a mapping function, but only for removing items from an array and not changing them
+        //-----------------VV------------Length of the new array
+        let appleSpawnLength = whereCanAppleSpawn.length;
+        // let newApple = document.querySelector(`#gridEach-${Math.floor(Math.random() * 626)}`);
+        //--------------VV--------------{create a random number based on the length of the new array}
+        let newAppleIndex = Math.floor(Math.random() * appleSpawnLength);
+        // --------------VV--------------{chose the new apple based on the grid id located at the index created above}
+        let newAppleGridId = whereCanAppleSpawn[newAppleIndex]
+        // -------------VV---------------{Select the grid element at that id}
+        let newApple = document.querySelector(`#gridEach-${newAppleGridId}`)
         newApple.setAttribute('class', 'gridEachApple');
         scoreTracker += 1;
         currentScore.innerHTML = scoreTracker;
@@ -197,6 +192,7 @@ const resetVariables = () => {
     snakeBodies = [];
     newId = null;
 };
+
 /*----------------------------------------------------{Delay Function}
 This is for informational purposes only, and will not run at runtime.  
 If code is changed to make this active at run time, the game will not be playable
