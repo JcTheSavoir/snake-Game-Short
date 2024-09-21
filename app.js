@@ -3,17 +3,22 @@ let snakeCurrentDirection = null; //---------------------------------{Variable t
 let delaySnake = null; //---------------------{Variable to assist in delaying snake movement}
 let newId = null; //-------------------------------{Variable to keep track of head of snake}
 let snakeBodies = []; //-------------------------------{Variable to keep track of body of snake}
+let appleTrackArray = []; //--------------------------------{Array to keep track of where apple can spawn}
 // -------------------------------------------VV---------{Create grid for game}
 const generateGrid = () => {
     let gridItself = document.querySelector('#gridItself');
     gridItself.innerHTML = "";
+    appleTrackArray = [];
+    console.log(appleTrackArray)
     for (let i = 0; i < 625; i++) {
         // delayGrid(i) // This shows the grid being generated on element at a time.  Game will not work if this is active
         let gridEach = document.createElement('div');
         gridEach.setAttribute('id', `gridEach-${i}`);
+        appleTrackArray.push(i)
         gridEach.innerHTML = i;
         gridItself.append(gridEach);
     };
+    console.log(appleTrackArray)
     let startSnake = document.querySelector("#gridEach-305");
     let startApple = document.querySelector(`#gridEach-${Math.floor(Math.random() * 626)}`);
     startApple.setAttribute('class', 'gridEachApple');
