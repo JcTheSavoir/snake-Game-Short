@@ -59,7 +59,7 @@ body{
 }
 .gridEachSnakeBody{
     aspect-ratio: 1/1;
-    background-image: url(/images/snake-segment.png);
+    background-image: url(./images/snake-segment.png);
     color: transparent;
     background-size:cover;
     /* transform: rotate(-90deg); */
@@ -68,7 +68,7 @@ body{
 }
 .gridEachSnakeHead{
     aspect-ratio: 1/1;
-    background-image: url(/images/headSnake.png);
+    background-image: url(./images/headSnake.png);
     color: transparent;
     background-size: contain;
     /* transform: rotate(-90deg); */
