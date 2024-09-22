@@ -20,7 +20,7 @@ const generateGrid = () => {
     let startSnake = document.querySelector("#gridEach-305");
     let startApple = document.querySelector(`#gridEach-320`);
     startApple.setAttribute('class', 'gridEachApple');
-    startSnake.setAttribute('class', `gridEachSnakeBody`);
+    startSnake.setAttribute('class', `gridEachSnakeHead`);
     let startButton = document.querySelector('.startGame');
     startButton.innerHTML = "Restart Game";
     resetVariables();
@@ -53,10 +53,10 @@ const directionSnakeHead = (e) => {
     let findSnake = null;
 // PART 1 ---------------------------find the element with snake class when grid is created
     if (newId === null) {
-        findSnake = document.querySelector('.gridEachSnakeBody');
+        findSnake = document.querySelector('.gridEachSnakeHead');
 // PART 2 ---------------------------If grid is already made, track movement of the original snake
     } else { 
-        findSnake = document.querySelector(`.gridEachSnakeBody#gridEach-${newId}`);
+        findSnake = document.querySelector(`.gridEachSnakeHead#gridEach-${newId}`);
     };
     let currentSnake = findSnake ? findSnake.id: null; // -------------------------------------------Find the id of the associated snake element
     const splitID = currentSnake.split('-'); //----------------------------------------Split Id into word and number
@@ -80,33 +80,42 @@ const directionSnakeHead = (e) => {
     };
     checkForDefeat(changeToNumber, newId); //----------------------Checks to see if the movement would lead to defeat
     let newSnake = document.querySelector(`#gridEach-${newId}`); //-------------------------------------select element with the new Id    
-    newSnake.setAttribute('class', `gridEachSnakeBody`); //---------------------------------------------add the Snake class to the element
-    checkToAddSnake(findSnake); //-------------------------Check if a new element needs the snake class
+    newSnake.setAttribute('class', `gridEachSnakeHead`); //---------------------------------------------add the Snake class to the element
+    changeImageDirection(newSnake, e); //---------------------------------Check if snake head image needs rotated 
+    checkToAddSnake(findSnake); //-------------------------Check if a new element needs a snake class
     let snakeBodyArrays = directionSnakeBody(pastId, newId); //----------------------Keeps track of the snakeBodies
     createApple(snakeBodies, newId);
 };
 //-------------------------------------VV--------------{check if new snake is needed}
 const checkToAddSnake = (theSnake) => {
-    const snakeLength = document.querySelectorAll('.gridEachSnakeBody').length;
+    const snakeLengthBody = document.querySelectorAll('.gridEachSnakeBody').length;
+    const snakeLengthHead = document.querySelectorAll('.gridEachSnakeHead').length;
+    let fullSnakeLength = snakeLengthBody + snakeLengthHead;
     let currentLength = document.querySelector('.actualSnakeLength');
-    if ((snakeLength - scoreTracker) - 1 === 0 || scoreTracker > (snakeLength + 2)) {
+    if ((fullSnakeLength - scoreTracker) - 1 === 0 || scoreTracker > (fullSnakeLength + 2)) {
         // theSnake.classList.remove('gridEachSnakeBody')  //--comment out this line to allow snake to grow
-        const snakeLength = document.querySelectorAll('.gridEachSnakeBody').length;
-        currentLength.innerHTML = snakeLength;
+        const snakeLengthBody = document.querySelectorAll('.gridEachSnakeBody').length;
+        const snakeLengthHead = document.querySelectorAll('.gridEachSnakeHead').length;
+        let fullSnakeLength = snakeLengthBody + snakeLengthHead;
+        currentLength.innerHTML = fullSnakeLength;
+        theSnake.classList.remove('gridEachSnakeHead')
+        theSnake.classList.add('gridEachSnakeBody')
     }else{
-        theSnake.classList.remove('gridEachSnakeBody');
+        theSnake.classList.remove('gridEachSnakeHead');
     };
 };
 //------------------------------------------------------{Function for moving non head section of the snake (with a check of defeat if snake eats itself)}
 const directionSnakeBody = (pastId, newId) => {
-    const snakeLength = document.querySelectorAll('.gridEachSnakeBody').length;
-    if (snakeLength >= 2 && pastId != null) {
+    const snakeLengthBody = document.querySelectorAll('.gridEachSnakeBody').length;
+    const snakeLengthHead = document.querySelectorAll('.gridEachSnakeHead').length;
+    let fullSnakeLength = snakeLengthBody + snakeLengthHead;
+    if (fullSnakeLength >= 2 && pastId != null) {
         // adds the id of where snake head was, to the snake bodies array, as well as ensuring that body piece keeps the correct class
         snakeBodies.unshift(pastId);
         let snakeBodyAdd = document.querySelector(`#gridEach-${pastId}`)
         snakeBodyAdd.classList.add('gridEachSnakeBody');
     };
-    if (snakeBodies.length >= snakeLength && snakeBodies.length > 1) {
+    if (snakeBodies.length >= fullSnakeLength && snakeBodies.length > 1) {
         let snakeRemove = (snakeBodies.pop() * 1);
         // ------------------ if statement to prevent head of snake from losing it's class when directly behind the end of the snake
         if (snakeRemove === newId) {
@@ -192,7 +201,23 @@ const resetVariables = () => {
     snakeBodies = [];
     newId = null;
 };
-
+const changeImageDirection = (newSnake, e) => {
+    switch (e) {
+        //-------------------------Depending on the direction, change Id to match corresponding new block
+        case "ArrowUp":
+            newSnake.style.transform = "rotate(180deg)";
+            break;
+        case "ArrowDown":
+            newSnake.style.transform = "rotate(0deg)";
+            break;
+        case "ArrowRight":
+            newSnake.style.transform = "rotate(270deg)";
+            break;
+        case "ArrowLeft":
+            newSnake.style.transform = "rotate(90deg)";
+            break;                    
+    };
+}
 /*----------------------------------------------------{Delay Function}
 This is for informational purposes only, and will not run at runtime.  
 If code is changed to make this active at run time, the game will not be playable
