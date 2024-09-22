@@ -52,20 +52,25 @@ body{
 }
 #gridItself > *{
     aspect-ratio: 1/1;
+    /* set border width to 0px and snake pieces will start to look better at that point */
     border: solid purple;
-    border-width: 0.1px;
+    border-width: 0.01px;
     font-size: small;
 }
 .gridEachSnakeBody{
     aspect-ratio: 1/1;
-    background-color: green;
+    background-image: url(/images/snake-segment.png);
+    color: transparent;
+    background-size:cover;
+    /* transform: rotate(-90deg); */
+    background-repeat: no-repeat;
     border-width: 0.1px;
 }
 .gridEachSnakeHead{
     aspect-ratio: 1/1;
     background-image: url(/images/headSnake.png);
     color: transparent;
-    background-size:contain;
+    background-size: contain;
     /* transform: rotate(-90deg); */
     background-repeat: no-repeat;
     border-width: 0.1px;
